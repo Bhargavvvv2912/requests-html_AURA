@@ -19,10 +19,10 @@ jobs:
           python-version: '3.10'
 
       - name: 🛠️ Setup Agent Deps & System Browser
-        # These libraries are required for the Headless Chromium browser to launch
         run: |
           sudo apt-get update
-          sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2
+          # Swapped libasound2 -> libasound2t64 for Ubuntu 24.04 compatibility
+          sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2t64
           pip install google-genai google-api-core pypi-simple packaging pip-tools
 
       - name: 🧪 1. Run Pip Baseline (2022 State)
