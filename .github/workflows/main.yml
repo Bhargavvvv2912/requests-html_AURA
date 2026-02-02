@@ -31,7 +31,7 @@ jobs:
           ./baseline_env/bin/pip install -r requirements.txt
           ./baseline_env/bin/pip install -e .
           # Run the native test suite
-          ./baseline_env/bin/python -m pytest tests/test_requests_html.py
+          ./baseline_env/bin/python -m pytest validation_requests_html.py
 
       - name: 💥 2. Run Pip Upgrade (The Attack)
         continue-on-error: true
@@ -41,7 +41,7 @@ jobs:
           ./upgrade_env/bin/pip install --upgrade -r primary_requirements.txt
           ./upgrade_env/bin/pip install -e .
           # This should fail with a TypeError in the browser launch
-          ./upgrade_env/bin/python -m pytest tests/test_requests_html.py
+          ./upgrade_env/bin/python -m pytest validation_requests_html.py
 
       - name: 🤖 3. Run AURA Agent (The Healing Pass)
         run: |

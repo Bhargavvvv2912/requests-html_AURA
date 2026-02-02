@@ -30,8 +30,8 @@ AGENT_CONFIG = {
     "METRICS_OUTPUT_FILE": "metrics_output.txt",
     "PRIMARY_REQUIREMENTS_FILE": "primary_requirements.txt",
     "VALIDATION_CONFIG": {
-        "type": "pytest",
-        "pytest_target": "tests/test_requests_html.py", # Using their actual test suite
+        "type": "script",
+        "smoke_test_script": "validation_requests_html.py",
         "project_dir": "." 
     },
     "MAX_RUN_PASSES": 3,

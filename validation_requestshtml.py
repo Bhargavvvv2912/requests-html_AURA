@@ -1,45 +1,42 @@
 import sys
-import numpy as np
+import asyncio
+from requests_html import HTMLSession
 
-def test_sbert_logic():
-    print("--- Starting Sentence-Transformers Functional Verification ---")
+def test_render_feature():
+    print("--- Starting Requests-HTML Functional Verification ---")
+    
+    # 1. Initialize the session
+    session = HTMLSession()
     
     try:
-        # 1. Model Initialization
-        # We use a small model to keep the GitHub Runner fast.
-        print("--> Loading SentenceTransformer model...")
-        from sentence_transformers import SentenceTransformer
-        model = SentenceTransformer('all-MiniLM-L6-v2')
-        print("    [✓] Model loaded.")
-
-        # 2. Embedding Generation (The Numpy/Torch Handshake)
-        # Upgrading numpy to 2.0+ often breaks the .cpu().numpy() calls 
-        # inside older sentence-transformers versions.
-        print("--> Generating embeddings...")
-        sentences = ["AURA is a modernization agent.", "ASE 2026 is a top-tier conference."]
-        embeddings = model.encode(sentences)
+        # 2. Basic Fetch
+        print("--> Fetching example.com...")
+        r = session.get('https://example.com')
         
-        if embeddings.shape == (2, 384):
-            print(f"    [✓] Embeddings valid. Shape: {embeddings.shape}")
+        # 3. TRIGGER THE DEP-DRIFT TRAP
+        # .render() triggers pyppeteer -> urllib3 launch.
+        # On urllib3 2.0+, this throws a TypeError: 'method' is an unexpected keyword.
+        print("--> Launching Chromium and Rendering JavaScript...")
+        r.html.render(timeout=30)
+        
+        # 4. Verify Content
+        if "Example Domain" in r.html.text:
+            print("    [✓] JavaScript rendering successful.")
         else:
-            raise ValueError(f"Unexpected embedding shape: {embeddings.shape}")
-
-        # 3. Precision Check
-        # Ensures that upgrading scipy/numpy hasn't introduced floating point drift.
-        norm = np.linalg.norm(embeddings[0])
-        print(f"    [✓] L2 Norm: {norm:.4f}")
-        
-        if not (0.9 < norm < 1.1):
-            raise ValueError("Embedding normalization drift detected.")
-
+            raise ValueError("Rendered content does not match expectation.")
+            
         print("--- SMOKE TEST PASSED ---")
+        session.close()
 
     except Exception as e:
         print(f"CRITICAL VALIDATION FAILURE: {str(e)}")
-        # Likely failures: 
-        # - UserWarning: Specified group 'I' is not known (Ruff/Linter conflict)
-        # - ImportError: cannot import name 'triu' from 'scipy.linalg' (SciPy drift)
+        # If urllib3 2.x is present, we expect a TypeError or AttributeError here.
+        if session:
+            try:
+                session.close()
+            except:
+                pass
         sys.exit(1)
 
 if __name__ == "__main__":
-    test_sbert_logic()
+    test_render_feature()
