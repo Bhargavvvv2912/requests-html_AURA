@@ -5,7 +5,6 @@ parse
 beautifulsoup4
 w3lib
 pyppeteer
-urllib3
 pytest
 pytest-asyncio
 requests-file
