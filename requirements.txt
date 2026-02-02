@@ -7,7 +7,10 @@ beautifulsoup4==4.11.2
 w3lib==2.1.1
 pyppeteer==1.0.2
 
-# Native test suite dependencies
+# The "Missing Link" for modern lxml
+lxml_html_clean==0.1.0
+
+# Testing tools required by their script
 pytest==7.2.0
 pytest-asyncio==0.20.3
 requests-file==1.5.1

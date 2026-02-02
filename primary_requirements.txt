@@ -5,6 +5,7 @@ parse
 beautifulsoup4
 w3lib
 pyppeteer
+lxml_html_clean
 pytest
 pytest-asyncio
 requests-file
